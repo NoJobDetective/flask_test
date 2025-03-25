@@ -1,59 +1,68 @@
+# app.py
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-import os
+from models import ProjectManager
 
 app = Flask(__name__)
-TODO_FILE = 'data.txt'
-
-# TODOリストをファイルから読み込む関数
-def load_todos():
-    if not os.path.exists(TODO_FILE):
-        return []
-    
-    with open(TODO_FILE, 'r', encoding='utf-8') as f:
-        todos = [line.strip() for line in f.readlines() if line.strip()]
-    return todos
-
-# TODOリストをファイルに保存する関数
-def save_todos(todos):
-    with open(TODO_FILE, 'w', encoding='utf-8') as f:
-        for todo in todos:
-            f.write(f"{todo}\n")
+project_manager = ProjectManager()
 
 @app.route('/')
 def index():
-    todos = load_todos()
-    return render_template('index.html', todos=todos)
+    projects = project_manager.get_all_projects()
+    return render_template('index.html', projects=projects)
 
-@app.route('/add', methods=['POST'])
-def add():
-    todo = request.form.get('todo')
-    if todo and todo.strip():
-        todos = load_todos()
-        todos.append(todo)
-        save_todos(todos)
+@app.route('/project/create', methods=['POST'])
+def create_project():
+    name = request.form.get('project_name')
+    if name and name.strip():
+        project_id = project_manager.create_project(name)
+        return redirect(url_for('view_project', project_id=project_id))
     return redirect(url_for('index'))
 
-@app.route('/delete/<int:todo_id>')
-def delete(todo_id):
-    todos = load_todos()
-    if 0 <= todo_id < len(todos):
-        todos.pop(todo_id)
-        save_todos(todos)
+@app.route('/project/<project_id>')
+def view_project(project_id):
+    project = project_manager.get_project(project_id)
+    if project:
+        return render_template('project.html', project=project)
     return redirect(url_for('index'))
 
-@app.route('/edit', methods=['POST'])
-def edit():
-    todo_id = int(request.form.get('todo_id'))
+@app.route('/project/<project_id>/update', methods=['POST'])
+def update_project(project_id):
+    name = request.form.get('project_name')
+    if name and name.strip():
+        project_manager.update_project_name(project_id, name)
+    return redirect(url_for('view_project', project_id=project_id))
+
+@app.route('/project/<project_id>/delete', methods=['POST'])
+def delete_project(project_id):
+    project_manager.delete_project(project_id)
+    return redirect(url_for('index'))
+
+@app.route('/project/<project_id>/item/add', methods=['POST'])
+def add_item(project_id):
+    point_type = request.form.get('point_type')
+    item_text = request.form.get('item_text')
+    if point_type and item_text and item_text.strip():
+        project_manager.add_item(project_id, point_type, item_text)
+    return redirect(url_for('view_project', project_id=project_id))
+
+@app.route('/project/<project_id>/item/update', methods=['POST'])
+def update_item(project_id):
+    point_type = request.form.get('point_type')
+    item_index = int(request.form.get('item_index'))
     new_text = request.form.get('new_text')
     
-    if new_text and new_text.strip():
-        todos = load_todos()
-        if 0 <= todo_id < len(todos):
-            todos[todo_id] = new_text
-            save_todos(todos)
-            return jsonify({"success": True})
-    
+    if point_type and new_text and new_text.strip():
+        success = project_manager.update_item(project_id, point_type, item_index, new_text)
+        return jsonify({"success": success})
     return jsonify({"success": False}), 400
 
+@app.route('/project/<project_id>/item/delete', methods=['POST'])
+def delete_item(project_id):
+    point_type = request.form.get('point_type')
+    item_index = int(request.form.get('item_index'))
+    
+    success = project_manager.delete_item(project_id, point_type, item_index)
+    return jsonify({"success": success})
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True, host='0.0.0.0')
