@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import os
 
 app = Flask(__name__)
@@ -40,6 +40,20 @@ def delete(todo_id):
         todos.pop(todo_id)
         save_todos(todos)
     return redirect(url_for('index'))
+
+@app.route('/edit', methods=['POST'])
+def edit():
+    todo_id = int(request.form.get('todo_id'))
+    new_text = request.form.get('new_text')
+    
+    if new_text and new_text.strip():
+        todos = load_todos()
+        if 0 <= todo_id < len(todos):
+            todos[todo_id] = new_text
+            save_todos(todos)
+            return jsonify({"success": True})
+    
+    return jsonify({"success": False}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
