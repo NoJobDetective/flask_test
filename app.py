@@ -10,13 +10,30 @@ def index():
     projects = project_manager.get_all_projects()
     return render_template('index.html', projects=projects)
 
-@app.route('/project/create', methods=['POST'])
-def create_project():
-    name = request.form.get('project_name')
-    if name and name.strip():
-        project_id = project_manager.create_project(name)
-        return redirect(url_for('view_project', project_id=project_id))
-    return redirect(url_for('index'))
+def create_project(self, name):
+    project_id = str(uuid.uuid4())
+    new_project = {
+        "id": project_id,
+        "name": name,
+        "created_at": datetime.now().strftime("%Y-%m-%d"),
+        "points": {
+            "definition": {
+                "title": "1. 解決したい問題の定義",
+                "items": []
+            },
+            "mvp": {
+                "title": "2. MVP（最低限の機能）",
+                "items": []
+            },
+            "backlog": {
+                "title": "3. 追加機能（後回しリスト）",
+                "items": []
+            }
+        }
+    }
+    self.projects["projects"].append(new_project)
+    self.save_data()
+    return project_id  # 文字列のproject_idを返す
 
 @app.route('/project/<project_id>')
 def view_project(project_id):
