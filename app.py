@@ -10,6 +10,7 @@ def index():
     projects = project_manager.get_all_projects()
     return render_template('index.html', projects=projects)
 
+@app.route('/project/create', methods=['POST'])
 def create_project(self, name):
     project_id = str(uuid.uuid4())
     new_project = {
