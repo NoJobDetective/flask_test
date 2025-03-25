@@ -25,6 +25,15 @@
             border-radius: 5px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+        .todo-text {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .todo-actions {
+            display: flex;
+            gap: 10px;
         }
         form {
             margin: 20px 0;
@@ -48,6 +57,35 @@
             color: #f44336;
             text-decoration: none;
         }
+        .edit {
+            color: #2196F3;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .editing input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #2196F3;
+            border-radius: 5px;
+        }
+        .editing .todo-actions {
+            display: none;
+        }
+        .edit-actions {
+            display: none;
+        }
+        .editing .edit-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .save-btn {
+            color: #4CAF50;
+            cursor: pointer;
+        }
+        .cancel-btn {
+            color: #f44336;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -58,13 +96,106 @@
         <button type="submit">追加</button>
     </form>
     
-    <ul>
+    <ul id="todo-list">
         {% for todo in todos %}
-        <li>
-            {{ todo }}
-            <a href="{{ url_for('delete', todo_id=loop.index0) }}" class="delete">削除</a>
+        <li data-id="{{ loop.index0 }}">
+            <div class="todo-text">{{ todo }}</div>
+            <div class="todo-actions">
+                <a href="#" class="edit" onclick="editTodo({{ loop.index0 }})">編集</a>
+                <a href="{{ url_for('delete', todo_id=loop.index0) }}" class="delete">削除</a>
+            </div>
+            <div class="edit-actions">
+                <a href="#" class="save-btn" onclick="saveTodo({{ loop.index0 }})">保存</a>
+                <a href="#" class="cancel-btn" onclick="cancelEdit({{ loop.index0 }})">キャンセル</a>
+            </div>
         </li>
         {% endfor %}
     </ul>
+
+    <script>
+        // 編集モードに切り替える
+        function editTodo(id) {
+            const li = document.querySelector(`li[data-id="${id}"]`);
+            const todoText = li.querySelector('.todo-text');
+            const currentText = todoText.textContent;
+            
+            // 編集用のinput要素を作成
+            todoText.innerHTML = `<input type="text" value="${currentText}" class="edit-input">`;
+            li.classList.add('editing');
+            
+            // 入力フィールドにフォーカスを当てる
+            const input = li.querySelector('input');
+            input.focus();
+            input.setSelectionRange(input.value.length, input.value.length);
+            
+            return false;
+        }
+        
+        // 編集内容を保存
+        function saveTodo(id) {
+            const li = document.querySelector(`li[data-id="${id}"]`);
+            const input = li.querySelector('input');
+            const newText = input.value.trim();
+            
+            if (!newText) {
+                alert('TODOを入力してください');
+                return false;
+            }
+            
+            // サーバーに編集内容を送信
+            const formData = new FormData();
+            formData.append('todo_id', id);
+            formData.append('new_text', newText);
+            
+            fetch('/edit', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const todoText = li.querySelector('.todo-text');
+                    todoText.textContent = newText;
+                    li.classList.remove('editing');
+                } else {
+                    alert('更新に失敗しました');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('エラーが発生しました');
+            });
+            
+            return false;
+        }
+        
+        // 編集をキャンセル
+        function cancelEdit(id) {
+            const li = document.querySelector(`li[data-id="${id}"]`);
+            const todoText = li.querySelector('.todo-text');
+            const originalText = todoText.querySelector('input').defaultValue;
+            
+            todoText.textContent = originalText;
+            li.classList.remove('editing');
+            
+            return false;
+        }
+        
+        // Enterキーで保存、Escキーでキャンセル
+        document.addEventListener('keydown', function(event) {
+            const editingLi = document.querySelector('li.editing');
+            if (!editingLi) return;
+            
+            const id = editingLi.getAttribute('data-id');
+            
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                saveTodo(id);
+            } else if (event.key === 'Escape') {
+                event.preventDefault();
+                cancelEdit(id);
+            }
+        });
+    </script>
 </body>
 </html>
