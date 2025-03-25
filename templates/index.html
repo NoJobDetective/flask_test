@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TODOリスト</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        form {
+            margin: 20px 0;
+            display: flex;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+        .delete {
+            color: #f44336;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>TODOリスト</h1>
+    
+    <form action="{{ url_for('add') }}" method="post">
+        <input type="text" name="todo" placeholder="新しいTODOを入力" required>
+        <button type="submit">追加</button>
+    </form>
+    
+    <ul>
+        {% for todo in todos %}
+        <li>
+            {{ todo }}
+            <a href="{{ url_for('delete', todo_id=loop.index0) }}" class="delete">削除</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
