@@ -8,16 +8,19 @@
 <body>
     <h1>プロジェクト編集</h1>
     <form method="POST">
-        <label for="problem"><strong>解決したい問題や作りたいものを1文で定義</strong>:</label><br>
-        <textarea name="problem" id="problem" rows="1" required>{{ project.problem }}</textarea><br><br>
+        <div id="printableArea">
+            <label for="problem"><strong>解決したい問題や作りたいものを1文で定義</strong>:</label><br>
+            <textarea name="problem" id="problem" rows="1" required>{{ project.problem }}</textarea><br><br>
 
-        <label for="mvp"><strong>MVP(最低限の機能)リスト</strong> (各項目を改行で区切る):</label><br>
-        <textarea name="mvp" id="mvp" rows="4">{% for item in project.mvp %}{{ item }}
-{% endfor %}</textarea><br><br>
+            <label for="mvp"><strong>MVP(最低限の機能)リスト</strong> (各項目を改行で区切る):</label><br>
+            <textarea name="mvp" id="mvp" rows="4">{% for item in project.mvp %}{{ item }}
+    {% endfor %}</textarea><br><br>
 
-        <label for="later"><strong>追加機能の「後回しリスト」</strong> (各項目を改行で区切る):</label><br>
-        <textarea name="later" id="later" rows="4">{% for item in project.later %}{{ item }}
-{% endfor %}</textarea><br><br>
+            <label for="later"><strong>追加機能の「後回しリスト」</strong> (各項目を改行で区切る):</label><br>
+            <textarea name="later" id="later" rows="4">{% for item in project.later %}{{ item }}
+    {% endfor %}</textarea><br><br>
+
+        </div>
 
         <button type="submit">更新する</button>
     </form>
