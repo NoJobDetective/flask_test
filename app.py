@@ -23,8 +23,8 @@ def index():
     projects = load_projects()
     if request.method == 'POST':
         problem = request.form.get('problem')
-        mvp_items = request.form.get('mvp').splitlines()
-        later_items = request.form.get('later').splitlines()
+        mvp_items = request.form.get('mvp', '').splitlines()
+        later_items = request.form.get('later', '').splitlines()
         new_project = {
             "problem": problem,
             "mvp": [item.strip() for item in mvp_items if item.strip() != ""],
