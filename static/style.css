@@ -8,16 +8,46 @@ h1, h2 {
     color: #333;
 }
 
-textarea {
-    width: 100%;
-    max-width: 600px;
+/* コンテナで2カラムレイアウトを実現 */
+.container {
+    display: flex;
+    gap: 20px;
 }
 
+/* 左カラム：フォーム */
+.left-column {
+    flex: 1;
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+/* 右カラム：プロジェクト一覧 */
+.right-column {
+    flex: 1;
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+/* テキストエリアのスタイル */
+textarea {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* ボタンのスタイル */
 button {
     padding: 10px 20px;
     font-size: 16px;
+    cursor: pointer;
 }
 
-.project-item {
-    margin: 0 10px;
+/* レスポンシブ対応：画面が狭い場合 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
 }

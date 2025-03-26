@@ -7,46 +7,51 @@
 </head>
 <body>
     <h1>プロジェクト管理</h1>
-    
-    <h2>新規プロジェクトの追加</h2>
-    <form method="POST">
-        <label for="problem"><strong>解決したい問題や作りたいものを1文で定義</strong>:</label><br>
-        <textarea name="problem" id="problem" rows="2" required></textarea><br><br>
+    <div class="container">
+        <!-- 左カラム：新規プロジェクト追加フォーム -->
+        <div class="left-column">
+            <h2>新規プロジェクトの追加</h2>
+            <form method="POST">
+                <label for="problem"><strong>解決したい問題や作りたいものを1文で定義</strong>:</label><br>
+                <textarea name="problem" id="problem" rows="2" required></textarea><br><br>
 
-        <label for="mvp"><strong>MVP(最低限の機能)リスト</strong> (各項目を改行で区切る):</label><br>
-        <textarea name="mvp" id="mvp" rows="4"></textarea><br><br>
+                <label for="mvp"><strong>MVP(最低限の機能)リスト</strong> (各項目を改行で区切る):</label><br>
+                <textarea name="mvp" id="mvp" rows="4"></textarea><br><br>
 
-        <label for="later"><strong>追加機能の「後回しリスト」</strong> (各項目を改行で区切る):</label><br>
-        <textarea name="later" id="later" rows="4"></textarea><br><br>
+                <label for="later"><strong>追加機能の「後回しリスト」</strong> (各項目を改行で区切る):</label><br>
+                <textarea name="later" id="later" rows="4"></textarea><br><br>
 
-        <button type="submit">プロジェクトを追加</button>
-    </form>
+                <button type="submit">プロジェクトを追加</button>
+            </form>
+        </div>
 
-    <hr>
-
-    <h2>プロジェクト一覧</h2>
-    {% if projects %}
-        <ul>
-        {% for project in projects %}
-            <li class="project-item">
-                <strong>問題定義:</strong> {{ project.problem }}<br>
-                <strong>MVPリスト:</strong>
+        <!-- 右カラム：プロジェクト一覧 -->
+        <div class="right-column">
+            <h2>プロジェクト一覧</h2>
+            {% if projects %}
                 <ul>
-                {% for item in project.mvp %}
-                    <li>{{ item }}</li>
+                {% for project in projects %}
+                    <li>
+                        <strong>問題定義:</strong> {{ project.problem }}<br>
+                        <strong>MVPリスト:</strong>
+                        <ul>
+                        {% for item in project.mvp %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                        </ul>
+                        <strong>後回しリスト:</strong>
+                        <ul>
+                        {% for item in project.later %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                        </ul>
+                    </li>
                 {% endfor %}
                 </ul>
-                <strong>後回しリスト:</strong>
-                <ul>
-                {% for item in project.later %}
-                    <li>{{ item }}</li>
-                {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>プロジェクトがありません。</p>
-    {% endif %}
+            {% else %}
+                <p>プロジェクトがありません。</p>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>
