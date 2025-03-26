@@ -51,3 +51,37 @@ button {
         flex-direction: column;
     }
 }
+
+/* 既存のスタイルはそのままでOK */
+/* 2カラムレイアウト */
+.container {
+    display: flex;
+    gap: 20px;
+}
+
+.left-column, .right-column {
+    flex: 1;
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+/* テキストエリア・ボタン等のスタイルも引き続き適用 */
+textarea {
+    width: 100%;
+    max-width: 100%;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+}
