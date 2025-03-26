@@ -59,31 +59,5 @@
         </div>
     </div>
 
-    <!-- PDF出力用ボタン -->
-    <button id="downloadBtn">PDFで保存</button>
-
-    <!-- 必要なライブラリの読み込み -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script>
-        // PDF出力ボタンのクリックイベント
-        document.getElementById("downloadBtn").addEventListener("click", function() {
-            // 対象のDIVをキャプチャ
-            html2canvas(document.querySelector("#printableArea")).then(canvas => {
-                // 画像データをPNG形式で取得
-                const imgData = canvas.toDataURL('image/png');
-                // jsPDFでPDF作成（'p': 縦向き, 'mm': 単位, 'a4': 用紙サイズ）
-                const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-                // A4用紙の横幅（mm）
-                const pageWidth = 210;
-                // キャンバスの幅に合わせた高さを計算
-                const imgHeight = canvas.height * pageWidth / canvas.width;
-                // PDFに画像を追加（左上隅から配置）
-                pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, imgHeight);
-                // PDFとして保存
-                pdf.save("download.pdf");
-            });
-        });
-    </script>
 </body>
 </html>
