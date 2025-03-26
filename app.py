@@ -14,9 +14,17 @@ def index():
 def create_project():
     name = request.form.get('project_name')
     if name and name.strip():
-        project_id = project_manager.create_project(name)
-        return redirect(url_for('view_project', project_id=project_id))
+        try:
+            project_id = project_manager.create_project(name)
+            print(f"Created project with ID: {project_id}, type: {type(project_id)}")
+            return redirect(url_for('view_project', project_id=project_id))
+        except Exception as e:
+            print(f"Error creating project: {e}")
+            import traceback
+            traceback.print_exc()
+            return redirect(url_for('index'))
     return redirect(url_for('index'))
+
 
 @app.route('/project/<project_id>')
 def view_project(project_id):
