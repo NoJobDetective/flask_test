@@ -1,33 +1,11 @@
-{% extends "layout.html" %}
+<h1>プロジェクト一覧</h1>
+<form method="POST" action="{{ url_for('add_project') }}">
+    <input name="title" placeholder="プロジェクトの目的(1文)"/>
+    <button type="submit">追加</button>
+</form>
 
-{% block content %}
-<section class="projects">
-    <div class="project-header">
-        <h2>プロジェクト一覧</h2>
-        <button id="new-project-btn" class="btn">新規プロジェクト</button>
-    </div>
-    
-    <div id="new-project-form" class="form-container" style="display: none;">
-        <form action="{{ url_for('create_project') }}" method="post">
-            <input type="text" name="project_name" placeholder="プロジェクト名" required>
-            <button type="submit" class="btn">作成</button>
-            <button type="button" class="btn cancel" onclick="toggleNewProjectForm()">キャンセル</button>
-        </form>
-    </div>
-    
-    <ul class="project-list">
-        {% for project in projects %}
-        <li>
-            <a href="{{ url_for('view_project', project_id=project['id']) }}">
-                {{ project.name }}
-                <span class="project-date">{{ project.created_at }}</span>
-            </a>
-        </li>
-        {% endfor %}
-        
-        {% if not projects %}
-        <li class="empty-list">プロジェクトがありません。新しいプロジェクトを作成してください。</li>
-        {% endif %}
-    </ul>
-</section>
-{% endblock %}
+<ul>
+{% for project in projects %}
+    <li><a href="{{ url_for('project_detail', project_id=project.id) }}">{{ project.title }}</a></li>
+{% endfor %}
+</ul>
