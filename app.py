@@ -23,7 +23,6 @@ def index():
     projects = load_projects()
     if request.method == 'POST':
         problem = request.form.get('problem')
-        # テキストエリア内の各行をリスト化
         mvp_items = request.form.get('mvp').splitlines()
         later_items = request.form.get('later').splitlines()
         new_project = {
@@ -35,6 +34,38 @@ def index():
         save_projects(projects)
         return redirect(url_for('index'))
     return render_template('index.html', projects=projects)
+
+# 編集画面の表示および更新処理
+@app.route('/edit/<int:index>', methods=['GET', 'POST'])
+def edit_project(index):
+    projects = load_projects()
+    if index < 0 or index >= len(projects):
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        # 編集後の内容を取得
+        problem = request.form.get('problem')
+        mvp_items = request.form.get('mvp').splitlines()
+        later_items = request.form.get('later').splitlines()
+        updated_project = {
+            "problem": problem,
+            "mvp": [item.strip() for item in mvp_items if item.strip() != ""],
+            "later": [item.strip() for item in later_items if item.strip() != ""]
+        }
+        projects[index] = updated_project
+        save_projects(projects)
+        return redirect(url_for('index'))
+    # GET時は既存のデータを編集フォームに渡す
+    project = projects[index]
+    return render_template('edit.html', project=project, index=index)
+
+# 削除処理
+@app.route('/delete/<int:index>', methods=['POST'])
+def delete_project(index):
+    projects = load_projects()
+    if 0 <= index < len(projects):
+        projects.pop(index)
+        save_projects(projects)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

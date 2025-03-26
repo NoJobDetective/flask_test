@@ -25,7 +25,7 @@
             </form>
         </div>
 
-        <!-- 右カラム：プロジェクト一覧（印刷対象） -->
+        <!-- 右カラム：プロジェクト一覧 -->
         <div class="right-column" id="printableArea">
             <h2>プロジェクト一覧</h2>
             {% if projects %}
@@ -45,6 +45,11 @@
                             <li>{{ item }}</li>
                         {% endfor %}
                         </ul>
+                        <!-- 編集・削除ボタン -->
+                        <a href="{{ url_for('edit_project', index=loop.index0) }}">編集</a>
+                        <form action="{{ url_for('delete_project', index=loop.index0) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('本当に削除してよろしいですか？');">削除</button>
+                        </form>
                     </li>
                 {% endfor %}
                 </ul>
