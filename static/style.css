@@ -92,3 +92,7 @@ button {
         display: none;
     }
 }
+
+.project-item {
+    margin: 0 10px;
+}
