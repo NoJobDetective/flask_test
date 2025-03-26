@@ -85,3 +85,10 @@ button {
         flex-direction: column;
     }
 }
+
+@media print {
+    /* no-printクラスを持つ要素は印刷時に非表示 */
+    .no-print {
+        display: none;
+    }
+}
