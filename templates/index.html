@@ -13,16 +13,16 @@
             <h2>新規プロジェクトの追加</h2>
             <form method="POST">
                 <label for="problem"><strong>解決したい問題や作りたいものを1文で定義</strong>:</label><br>
-                <textarea name="problem" id="problem" rows="1" required></textarea><br><br>
-
+                <textarea name="problem" id="problem" rows="2" required>{{ project.problem }}</textarea><br><br>
+            
                 <label for="mvp"><strong>MVP(最低限の機能)リスト</strong> (各項目を改行で区切る):</label><br>
-                <textarea name="mvp" id="mvp" rows="4"></textarea><br><br>
-
+                <textarea name="mvp" id="mvp" rows="4">{{ project.mvp | join('\n') }}</textarea><br><br>
+            
                 <label for="later"><strong>追加機能の「後回しリスト」</strong> (各項目を改行で区切る):</label><br>
-                <textarea name="later" id="later" rows="4"></textarea><br><br>
-
-                <button type="submit">プロジェクトを追加</button>
-            </form>
+                <textarea name="later" id="later" rows="4">{{ project.later | join('\n') }}</textarea><br><br>
+            
+                <button type="submit">更新する</button>
+            </form>            
         </div>
 
         <!-- 右カラム：プロジェクト一覧 -->
