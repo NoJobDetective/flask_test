@@ -23,8 +23,8 @@ def index():
     projects = load_projects()
     if request.method == 'POST':
         problem = request.form.get('problem')
-        mvp_items = request.form.get('mvp', '').splitlines()
-        later_items = request.form.get('later', '').splitlines()
+        mvp_items = request.form.get('mvp').splitlines()
+        later_items = request.form.get('later').splitlines()
         new_project = {
             "problem": problem,
             "mvp": [item.strip() for item in mvp_items if item.strip() != ""],
@@ -44,8 +44,8 @@ def edit_project(index):
     if request.method == 'POST':
         # 編集後の内容を取得
         problem = request.form.get('problem')
-        mvp_items = request.form.get('mvp').splitlines()
-        later_items = request.form.get('later').splitlines()
+        mvp_items = request.form.get('mvp', '').splitlines()
+        later_items = request.form.get('later', '').splitlines()
         updated_project = {
             "problem": problem,
             "mvp": [item.strip() for item in mvp_items if item.strip() != ""],
