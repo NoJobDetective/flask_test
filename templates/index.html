@@ -27,7 +27,7 @@
 
         <!-- 右カラム：プロジェクト一覧 -->
         <div class="right-column" id="printableArea">
-            <h2>プロジェクト一覧</h2>
+            <h2>プロジェクト一覧<button id="downloadBtn">PDFで保存</button></h2>
             {% if projects %}
                 <ul>
                 {% for project in projects %}
@@ -58,9 +58,6 @@
             {% endif %}
         </div>
     </div>
-
-    <!-- PDF出力用ボタン -->
-    <button id="downloadBtn">PDFで保存</button>
 
     <!-- 必要なライブラリの読み込み -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
