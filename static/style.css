@@ -8,12 +8,6 @@ h1, h2 {
     color: #333;
 }
 
-/* コンテナで2カラムレイアウトを実現 */
-.container {
-    display: flex;
-    gap: 20px;
-}
-
 /* 左カラム：フォーム */
 .left-column {
     flex: 1;
@@ -30,12 +24,6 @@ h1, h2 {
     padding: 15px;
     border: 1px solid #ddd;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-}
-
-/* テキストエリアのスタイル */
-textarea {
-    width: 100%;
-    max-width: 100%;
 }
 
 /* ボタンのスタイル */
