@@ -49,9 +49,13 @@
                 const imgHeight = canvas.height * pageWidth / canvas.width;
                 // PDFに画像を追加（左上隅から配置）
                 pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, imgHeight);
-                // PDFとして保存
-                pdf.save("download.pdf");
-            });
+                
+                const blob = pdf.output("blob");
+                const blobUrl = URL.createObjectURL(blob);
+                const printWindow = window.open(blobUrl);
+                printWindow.addEventListener('load', function() {
+                    printWindow.print();
+                });
         });
     </script>
 </body>
